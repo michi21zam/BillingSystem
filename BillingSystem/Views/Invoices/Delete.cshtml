@@ -11,37 +11,17 @@
     <h4>Invoice</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.InvoiceNumber)
-        </dt>
+        <dt>Invoice Number</dt>
+        <dd>@Html.DisplayFor(model => model.InvoiceNumber)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.InvoiceNumber)
-        </dd>
+        <dt>Invoice Date</dt>
+        <dd>@Html.DisplayFor(model => model.InvoiceDate)</dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.InvoiceDate)
-        </dt>
+        <dt>Customer Name</dt>
+        <dd>@Html.DisplayFor(model => model.CustomerName)</dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.InvoiceDate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CustomerName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CustomerName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.TotalAmount)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.TotalAmount)
-        </dd>
+        <dt>Total Amount</dt>
+        <dd>@Html.DisplayFor(model => model.TotalAmount)</dd>
 
 
 

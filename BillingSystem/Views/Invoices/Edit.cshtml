@@ -49,7 +49,7 @@
         <div class="form-group">
             @Html.Label("Total Amount", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.TextBoxFor(model => model.TotalAmount, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.TotalAmount, new { @class = "form-control", @readonly = "readonly" })
             </div>
         </div>
 
