@@ -12,12 +12,18 @@
 <body>
 
     <nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container-fluid" style="max-width:1200px;margin:0 auto;display:flex;align-items:center;height:60px;padding:0 24px;">
+        <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;height:60px;padding:0 24px;width:100%;">
             <a class="navbar-brand" href="@Url.Action("Index","Invoices")">
                 <i class="fa fa-file-invoice-dollar" style="color:var(--teal);margin-right:8px;"></i>BillingSystem
             </a>
-            <ul class="nav navbar-nav" style="margin-left:32px;display:flex;list-style:none;gap:4px;margin-bottom:0;">
-                <li>@Html.ActionLink("Invoices", "Index", "Invoices", null, new { style = "padding:8px 14px;border-radius:8px;font-weight:600;color:var(--text);text-decoration:none;" })</li>
+            <ul style="margin:0 0 0 32px;display:flex;list-style:none;gap:4px;padding:0;">
+                <li>
+                    <a href="@Url.Action("Index","Invoices")"
+                       style="padding:8px 14px;border-radius:8px;font-weight:600;font-size:14px;color:var(--text);text-decoration:none;transition:color .2s;"
+                       onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='var(--text)'">
+                        <i class="fa fa-file-invoice" style="margin-right:6px;"></i>Invoices
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -31,19 +37,5 @@
 
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
-    <script>
-        // Page search filter (client-side)
-        document.addEventListener('DOMContentLoaded', function () {
-            var searchInput = document.getElementById('pageSearch');
-            if (!searchInput) return;
-            searchInput.addEventListener('input', function () {
-                var val = this.value.toLowerCase();
-                var rows = document.querySelectorAll('.table-card tbody tr');
-                rows.forEach(function (row) {
-                    row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none';
-                });
-            });
-        });
-    </script>
 </body>
 </html>

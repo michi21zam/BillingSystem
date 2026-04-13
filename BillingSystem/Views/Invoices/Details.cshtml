@@ -1,66 +1,125 @@
 ﻿@model BillingSystem.Models.Invoice
+
 @{
     ViewBag.Title = "Invoice Details";
 }
 
-<h2>Invoice Details</h2>
+<div class="page-header-section">
+    <div>
+        <a class="btn-back" href="@Url.Action("Index", "Invoices")">
+            <i class="fa fa-arrow-left"></i> BACK
+        </a>
+    </div>
+    <div class="page-header-titles">
+        <div class="page-label">Invoices</div>
+        <h1 class="page-title"><span>Details</span> of invoice #@Model.InvoiceNumber</h1>
+    </div>
+    <div style="min-width:120px;text-align:right;">
+        <a class="btn-create" href="@Url.Action("Edit", "Invoices", new { id = Model.InvoiceId })" style="font-size:13px;padding:9px 18px;">
+            <i class="fa fa-pen"></i> EDIT
+        </a>
+    </div>
+</div>
 
-<dl class="dl-horizontal">
-    <dt>Invoice Number</dt>
-    <dd>@Model.InvoiceNumber</dd>
+<div class="form-page-card" style="margin-bottom:24px;">
+    <div class="form-page-header">
+        <i class="fa fa-circle-info"></i> Invoice Information
+    </div>
+    <div class="form-row-grid">
+        <div class="float-field">
+            <label>InvoiceId</label>
+            <input class="float-input" value="@Model.InvoiceId" readonly />
+        </div>
+        <div class="float-field">
+            <label>InvoiceNumber</label>
+            <input class="float-input" value="@Model.InvoiceNumber" readonly />
+        </div>
+        <div class="float-field">
+            <label>InvoiceDate</label>
+            <input class="float-input" value="@Model.InvoiceDate.ToString("MMM dd, yyyy HH:mm")" readonly />
+        </div>
+        <div class="float-field">
+            <label>CustomerName</label>
+            <input class="float-input" value="@Model.CustomerName" readonly />
+        </div>
+        <div class="float-field">
+            <label>TotalAmount</label>
+            <input class="float-input" value="@String.Format("{0:C}", Model.TotalAmount)" readonly />
+        </div>
+        <div class="float-field">
+            <label>IsActive</label>
+            <input class="float-input" value="@(Model.IsActive ? "Active" : "Inactive")" readonly />
+        </div>
+    </div>
+</div>
 
-    <dt>Invoice Date</dt>
-    <dd>@Model.InvoiceDate</dd>
+@* ── INVOICE DETAILS TABLE ────────────────────────────────── *@
+<div class="page-header-section" style="margin-bottom:14px;">
+    <div>
+        <a class="btn-create" href="@Url.Action("Create", "InvoiceDetails", new { invoiceId = Model.InvoiceId })" style="font-size:13px;padding:9px 18px;">
+            <i class="fa fa-plus"></i> ADD ITEM
+        </a>
+    </div>
+    <div class="page-header-titles">
+        <div class="page-label">Invoice Items</div>
+        <h2 class="page-title" style="font-size:20px;">Invoice <span>Details</span></h2>
+    </div>
+    <div style="min-width:120px;"></div>
+</div>
 
-    <dt>Customer Name</dt>
-    <dd>@Model.CustomerName</dd>
-
-    <dt>Total Amount</dt>
-    <dd>@Model.TotalAmount</dd>
-</dl>
-
-<hr />
-
-<h3>Items</h3>
-
-@Html.ActionLink(
-    "Add Item",
-    "Create",
-    "InvoiceDetails",
-    new { invoiceId = Model.InvoiceId },
-    new { @class = "btn btn-primary" })
-
-@if (Model.InvoiceDetails.Any(d => d.IsActive))
-{
-    <table class="table">
-        <tr>
-            <th>Product Name</th>
-            <th>Quantity</th>
-            <th>Unit Price</th>
-            <th>Subtotal</th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model.InvoiceDetails.Where(d => d.IsActive))
-        {
+<div class="table-card">
+    <table>
+        <thead>
             <tr>
-                <td>@item.ProductName</td>
-                <td>@item.Quantity</td>
-                <td>@item.UnitPrice</td>
-                <td>@item.SubTotal</td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", "InvoiceDetails", new { id = item.InvoiceDetailId }, null)
-                    |
-                    @Html.ActionLink("Delete", "Delete", "InvoiceDetails", new { id = item.InvoiceDetailId }, null)
-                </td>
+                <th>InvoiceDetailId</th>
+                <th>ProductName</th>
+                <th>Quantity</th>
+                <th>UnitPrice</th>
+                <th>SubTotal</th>
+                <th>IsActive</th>
+                <th class="text-center">Actions</th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @if (Model.InvoiceDetails != null && Model.InvoiceDetails.Any(d => d.IsActive))
+            {
+                foreach (var item in Model.InvoiceDetails.Where(d => d.IsActive))
+                {
+                    <tr>
+                        <td><strong>@item.InvoiceDetailId</strong></td>
+                        <td>@item.ProductName</td>
+                        <td>@item.Quantity</td>
+                        <td>@String.Format("{0:C}", item.UnitPrice)</td>
+                        <td>@(item.SubTotal.HasValue ? String.Format("{0:C}", item.SubTotal) : "-")</td>
+                        <td><span class="badge-active">Active</span></td>
+                        <td style="text-align:center;">
+                            <a class="action-btn action-edit"
+                               href="@Url.Action("Edit", "InvoiceDetails", new { id = item.InvoiceDetailId })"
+                               title="Edit">
+                                <i class="fa fa-pen"></i>
+                            </a>
+                            @using (Html.BeginForm("Delete", "InvoiceDetails", FormMethod.Post,
+                                new { style = "display:inline;", onsubmit = "return confirm('Delete this item?');" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.Hidden("id", item.InvoiceDetailId)
+                                <button type="submit" class="action-btn action-delete" title="Delete">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" style="text-align:center;color:#9aabb8;padding:36px 0;font-size:14px;">
+                        <i class="fa fa-box-open" style="font-size:30px;display:block;margin-bottom:10px;opacity:.35;"></i>
+                        No items added yet.
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
-}
-else
-{
-    <p>No items added yet.</p>
-}
-
-<hr />
-@Html.ActionLink("Back to List", "Index")
+</div>
