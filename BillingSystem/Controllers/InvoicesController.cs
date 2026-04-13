@@ -18,8 +18,7 @@ namespace BillingSystem.Controllers
             string customerName,
             DateTime? dateFrom,
             DateTime? dateTo,
-            decimal? minTotal,
-            decimal? maxTotal,
+            decimal? totalAmount,
             int page = 1,
             int pageSize = 10)
         {
@@ -40,11 +39,8 @@ namespace BillingSystem.Controllers
             if (dateTo.HasValue)
                 query = query.Where(i => DbFunctions.TruncateTime(i.InvoiceDate) <= DbFunctions.TruncateTime(dateTo.Value));
 
-            if (minTotal.HasValue)
-                query = query.Where(i => i.TotalAmount >= minTotal.Value);
-
-            if (maxTotal.HasValue)
-                query = query.Where(i => i.TotalAmount <= maxTotal.Value);
+            if (totalAmount.HasValue)
+                query = query.Where(i => i.TotalAmount == totalAmount.Value);
 
             query = query.OrderByDescending(i => i.InvoiceDate);
 
@@ -63,8 +59,7 @@ namespace BillingSystem.Controllers
                 CustomerName = customerName,
                 DateFrom = dateFrom,
                 DateTo = dateTo,
-                MinTotal = minTotal,
-                MaxTotal = maxTotal,
+                TotalAmount = totalAmount,
                 Page = page,
                 PageSize = pageSize,
                 TotalCount = totalCount,

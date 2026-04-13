@@ -12,8 +12,7 @@ namespace BillingSystem.Models
         public string CustomerName { get; set; }
         public DateTime? DateFrom { get; set; }
         public DateTime? DateTo { get; set; }
-        public decimal? MinTotal { get; set; }
-        public decimal? MaxTotal { get; set; }
+        public decimal? TotalAmount { get; set; }
 
         // Paging
         public int Page { get; set; }

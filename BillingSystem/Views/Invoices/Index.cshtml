@@ -14,7 +14,7 @@
         <div class="page-label">Invoices</div>
         <h1 class="page-title"><span>Review</span> invoices in Billing System</h1>
     </div>
-    <div style="min-width:120px;"></div>
+    <div class="header-spacer"></div>
 </div>
 
 @using (Html.BeginForm("Index", "Invoices", FormMethod.Get))
@@ -36,19 +36,16 @@
             <label>Date To</label>
             @Html.TextBoxFor(m => m.DateTo, "{0:yyyy-MM-dd}", new { type = "date" })
         </div>
-        <div class="filter-field" style="max-width:110px;">
-            <label>Min Total</label>
-            @Html.TextBoxFor(m => m.MinTotal, new { type = "number", step = "0.01", placeholder = "0.00" })
+        <div class="filter-field filter-field--small">
+            <label>Total Amount</label>
+            @Html.TextBoxFor(m => m.TotalAmount, new { type = "number", step = "0.01", placeholder = "0.00" })
         </div>
-        <div class="filter-field" style="max-width:110px;">
-            <label>Max Total</label>
-            @Html.TextBoxFor(m => m.MaxTotal, new { type = "number", step = "0.01", placeholder = "9999.99" })
-        </div>
+ 
         <div class="filter-actions">
             <button type="submit" class="btn-filter-action" title="Search">
                 <i class="fa fa-search"></i>
             </button>
-            <a href="@Url.Action("Index", "Invoices")" class="btn-filter-action" title="Reset" style="background:#8a9bac;">
+            <a href="@Url.Action("Index", "Invoices")" class="btn-filter-action btn-filter-reset" title="Reset">
                 <i class="fa fa-rotate-right"></i>
             </a>
         </div>
@@ -63,12 +60,12 @@
     <table>
         <thead>
             <tr>
-                <th>InvoiceId</th>
-                <th>InvoiceNumber</th>
-                <th>InvoiceDate</th>
-                <th>CustomerName</th>
-                <th>TotalAmount</th>
-                <th>IsActive</th>
+                @*<th>Invoice Id</th>*@
+                <th>Invoice Number</th>
+                <th>Invoice Date</th>
+                <th>Customer Name</th>
+                <th>Total Amount</th>
+                <th>Status</th>
                 <th class="text-center">Actions</th>
             </tr>
         </thead>
@@ -78,7 +75,7 @@
                 foreach (var item in Model.Invoices)
                 {
                     <tr>
-                        <td><strong>@item.InvoiceId</strong></td>
+                        @*<td><strong>@item.InvoiceId</strong></td>*@
                         <td>@item.InvoiceNumber</td>
                         <td>@item.InvoiceDate.ToString("MMM dd, yyyy HH:mm")</td>
                         <td>@item.CustomerName</td>
@@ -93,7 +90,7 @@
                                 <span class="badge-inactive">Inactive</span>
                             }
                         </td>
-                        <td style="text-align:center;">
+                        <td class="text-center">
                             <a class="action-btn action-view"
                                href="@Url.Action("Details", "Invoices", new { id = item.InvoiceId })"
                                title="Details">
@@ -105,7 +102,7 @@
                                 <i class="fa fa-pen"></i>
                             </a>
                             @using (Html.BeginForm("Delete", "Invoices", FormMethod.Post,
-                                new { style = "display:inline;", onsubmit = "return confirm('Are you sure you want to delete this invoice?');" }))
+                                new { @class = "inline-form", onsubmit = "return confirm('Are you sure you want to delete this invoice?');" }))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.Hidden("id", item.InvoiceId)
@@ -120,8 +117,8 @@
             else
             {
                 <tr>
-                    <td colspan="7" style="text-align:center;color:#9aabb8;padding:48px 0;font-size:15px;">
-                        <i class="fa fa-file-invoice" style="font-size:36px;display:block;margin-bottom:12px;opacity:.35;"></i>
+                    <td colspan="7" class="no-data-cell">
+                        <i class="fa fa-file-invoice no-data-icon"></i>
                         No invoices found.
                     </td>
                 </tr>
@@ -138,8 +135,7 @@
             customerName = Model.CustomerName,
             dateFrom = Model.DateFrom?.ToString("yyyy-MM-dd"),
             dateTo = Model.DateTo?.ToString("yyyy-MM-dd"),
-            minTotal = Model.MinTotal,
-            maxTotal = Model.MaxTotal
+            minTotal = Model.TotalAmount
         });
     }
 

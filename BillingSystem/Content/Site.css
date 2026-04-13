@@ -77,6 +77,11 @@ body {
     margin-bottom: 28px;
 }
 
+    /* spacer used in header to keep layout alignment (moved inline styles to CSS) */
+    .header-spacer {
+        min-width: 120px;
+    }
+
 .page-header-titles {
     text-align: center;
     flex: 1;
@@ -172,6 +177,11 @@ body {
     min-width: 130px;
 }
 
+/* small variant for compact filter fields */
+.filter-field--small {
+    max-width: 110px;
+}
+
     .filter-field label {
         font-size: 11px;
         font-weight: 700;
@@ -180,6 +190,31 @@ body {
         color: var(--muted);
         margin-bottom: 6px;
     }
+
+/* reset button variant previously using inline style */
+.btn-filter-reset {
+    background: #8a9bac;
+}
+
+/* inline form used for delete button in table rows (moved from inline attribute) */
+.inline-form {
+    display: inline;
+}
+
+/* No data row styles (moved from inline attributes) */
+.no-data-cell {
+    text-align: center;
+    color: #9aabb8;
+    padding: 48px 0;
+    font-size: 15px;
+}
+
+.no-data-icon {
+    font-size: 36px;
+    display: block;
+    margin-bottom: 12px;
+    opacity: .35;
+}
 
     .filter-field input,
     .filter-field select {
@@ -288,6 +323,8 @@ body {
         letter-spacing: .8px;
         background: transparent;
         border: none;
+        /* Ensure header text is left-aligned so column titles and data line up */
+        text-align: left;
     }
 
     .table-card tbody tr {
@@ -309,6 +346,13 @@ body {
         color: var(--text);
         vertical-align: middle;
         border: none;
+        /* Match header alignment by default */
+        text-align: left;
+    }
+
+    /* Utility to center specific cells (used for the actions column) */
+    .text-center {
+        text-align: center !important;
     }
 
 /* ── STATUS BADGES ──────────────────────────────────────── */
