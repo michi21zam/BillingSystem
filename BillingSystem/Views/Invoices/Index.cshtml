@@ -4,89 +4,84 @@
     ViewBag.Title = "Invoices";
 }
 
-<style>
-    /* Small view-specific tweaks to make table and filters look cleaner */
-    .invoice-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
-    .filter-toggle { cursor:pointer; }
-    .filter-card { transition:all .2s ease; }
-    .table-actions .btn { margin-right: .25rem; }
-    @@media (max-width: 576px) {
-        .form-row .form-group { margin-bottom: .5rem; }
-    }
-</style>
+@* ── PAGE HEADER ───────────────────────────────────────────── *@
+<div class="page-header-section">
+    <div>
+        <a class="btn-create" href="@Url.Action("Create", "Invoices")">
+            <i class="fa fa-plus"></i> CREATE NEW
+        </a>
+    </div>
 
-<div class="row align-items-center mb-3">
-    <div class="col-md-3 text-left">
-        <a class="btn btn-success btn-lg" href="@Url.Action("Create", "Invoices")"><i class="fa fa-plus mr-2"></i>CREATE NEW</a>
+    <div class="page-header-titles">
+        <div class="page-label">Invoices</div>
+        <h1 class="page-title"><span>Review</span> invoices in Billing System</h1>
     </div>
-    <div class="col-md-6 text-center">
-        <h2 class="mb-0">Companies</h2>
-        <div style="font-size:28px; color:#1b5f66; font-weight:700;">Review <span style="color:#6b6b6b; font-weight:400;">companies in Billing System</span></div>
-    </div>
-    <div class="col-md-3 text-right">
-        <span class="badge badge-primary">@Model.TotalCount</span>
+
+    <div style="min-width:120px;text-align:right;">
     </div>
 </div>
 
-<div class="position-relative mb-3">
-    <div class="card filter-card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <strong>Filters</strong>
-            <small class="filter-toggle text-primary" data-toggle="collapse" data-target="#filterBody" aria-expanded="true" aria-controls="filterBody">Show / Hide</small>
+@* ── FILTER CARD ────────────────────────────────────────────── *@
+@using (Html.BeginForm("Index", "Invoices", FormMethod.Get, new { id = "filterForm" }))
+{
+    <div class="filter-card">
+        <div class="filter-field">
+            <label>Invoice #</label>
+            @Html.TextBoxFor(m => m.InvoiceNumber, new { placeholder = "INV-001" })
         </div>
-        <div id="filterBody" class="collapse show">
-            <div class="card-body">
-                @using (Html.BeginForm("Index", "Invoices", FormMethod.Get, new { @class = "" }))
-                {
-                    <div class="form-row align-items-end">
-                        <div class="form-group col-md-2">
-                            <label for="InvoiceNumber">Id</label>
-                            @Html.TextBoxFor(m => m.InvoiceNumber, new { @class = "form-control", placeholder = "Id" })
-                        </div>
-                        <div class="form-group col-md-3">
-                            <label for="CustomerName">Name</label>
-                            @Html.TextBoxFor(m => m.CustomerName, new { @class = "form-control", placeholder = "Name" })
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="DateFrom">Status</label>
-                            <select class="form-control"><option>All</option></select>
-                        </div>
-                        <div class="form-group col-md-2">
-                            <label for="DateTo">Country</label>
-                            <select class="form-control"><option>All</option></select>
-                        </div>
-                        <div class="form-group col-md-1 text-right">
-                            <button type="submit" class="btn btn-primary btn-block">Filter</button>
-                        </div>
-                        <div class="form-group col-md-1 text-right">
-                            <a href="@Url.Action("Index", "Invoices")" class="btn btn-outline-secondary btn-block">Reset</a>
-                        </div>
-                    </div>
-                }
-            </div>
+
+        <div class="filter-field">
+            <label>Customer</label>
+            @Html.TextBoxFor(m => m.CustomerName, new { placeholder = "Customer name" })
+        </div>
+
+        <div class="filter-field">
+            <label>Date from</label>
+            @Html.TextBoxFor(m => m.DateFrom, "{0:yyyy-MM-dd}", new { type = "date" })
+        </div>
+
+        <div class="filter-field">
+            <label>Date to</label>
+            @Html.TextBoxFor(m => m.DateTo, "{0:yyyy-MM-dd}", new { type = "date" })
+        </div>
+
+        <div class="filter-field" style="max-width:110px;">
+            <label>Min total</label>
+            @Html.TextBoxFor(m => m.MinTotal, new { type = "number", step = "0.01", placeholder = "0.00" })
+        </div>
+
+        <div class="filter-field" style="max-width:110px;">
+            <label>Max total</label>
+            @Html.TextBoxFor(m => m.MaxTotal, new { type = "number", step = "0.01", placeholder = "9999.99" })
+        </div>
+
+        <div class="filter-actions">
+            <button type="submit" class="btn-filter-action" title="Search">
+                <i class="fa fa-search"></i>
+            </button>
+            <a href="@Url.Action("Index", "Invoices")" class="btn-filter-action" title="Reset" style="background:#8a9bac;">
+                <i class="fa fa-rotate-right"></i>
+            </a>
         </div>
     </div>
+}
 
-    <div class="filter-actions d-none d-md-block">
-        <button class="btn" title="Search"><i class="fa fa-search fa-lg"></i></button>
-        <button class="btn" title="Reset"><i class="fa fa-rotate fa-lg"></i></button>
-    </div>
+@* ── PAGE SEARCH ─────────────────────────────────────────────── *@
+<div class="page-search-wrap">
+    <input id="pageSearch" type="text" placeholder="Page search:" />
 </div>
 
-<div class="page-search">
-    <input class="form-control" placeholder="Page search:" />
-</div>
-
-<div class="table-wrapper mb-3">
-    <div class="table-responsive">
-    <table class="table table-hover table-sm">
-        <thead class="thead-light">
+@* ── TABLE ───────────────────────────────────────────────────── *@
+<div class="table-card">
+    <table>
+        <thead>
             <tr>
-                <th style="width:12%">Invoice #</th>
-                <th style="width:18%">Invoice Date</th>
+                <th>Invoice #</th>
+                <th>Date</th>
                 <th>Customer</th>
-                <th style="width:12%" class="text-right">Total</th>
-                <th style="width:20%" class="text-center">Actions</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -95,27 +90,39 @@
                 foreach (var item in Model.Invoices)
                 {
                     <tr>
-                        <td class="align-middle">@Html.DisplayFor(_ => item.InvoiceNumber)</td>
-                        <td class="align-middle">@Html.DisplayFor(_ => item.InvoiceDate)</td>
-                        <td class="align-middle">@Html.DisplayFor(_ => item.CustomerName)</td>
-                        <td class="align-middle text-center">
-                            @if (item.GetType().GetProperty("Status") != null)
+                        <td><strong>@item.InvoiceNumber</strong></td>
+                        <td>@item.InvoiceDate.ToString("MMM dd, yyyy")</td>
+                        <td>@item.CustomerName</td>
+                        <td>@String.Format("{0:C}", item.TotalAmount)</td>
+                        <td>
+                            @if (item.IsActive)
                             {
-                                var status = item.GetType().GetProperty("Status").GetValue(item, null)?.ToString();
-                                if (!string.IsNullOrEmpty(status))
-                                {
-                                    <span class="badge-status">@status</span>
-                                }
+                                <span class="badge-active">Active</span>
+                            }
+                            else
+                            {
+                                <span class="badge-inactive">Inactive</span>
                             }
                         </td>
-                        <td class="align-middle text-right">@String.Format("{0:C}", item.TotalAmount)</td>
-                        <td class="align-middle text-center table-actions">
-                            <a class="action-circle action-edit" href="@Url.Action("Edit", "Invoices", new { id = item.InvoiceId })" title="Edit"><i class="fa fa-pen"></i></a>
-                            @using (Html.BeginForm("Delete", "Invoices", FormMethod.Post, new { @class = "action-form", onsubmit = "return confirm('Are you sure?');" }))
+                        <td style="text-align:center;">
+                            <a class="action-btn action-view"
+                               href="@Url.Action("Details", "Invoices", new { id = item.InvoiceId })"
+                               title="View Details">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                            <a class="action-btn action-edit"
+                               href="@Url.Action("Edit", "Invoices", new { id = item.InvoiceId })"
+                               title="Edit">
+                                <i class="fa fa-pen"></i>
+                            </a>
+                            @using (Html.BeginForm("Delete", "Invoices", FormMethod.Post,
+                                new { style = "display:inline;", onsubmit = "return confirm('Delete this invoice?');" }))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.Hidden("id", item.InvoiceId)
-                                <button type="submit" class="action-circle action-delete" title="Delete"><i class="fa fa-trash"></i></button>
+                                <button type="submit" class="action-btn action-delete" title="Delete">
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             }
                         </td>
                     </tr>
@@ -124,41 +131,56 @@
             else
             {
                 <tr>
-                    <td colspan="5" class="text-center text-muted">No invoices found.</td>
+                    <td colspan="6" style="text-align:center;color:#9aabb8;padding:40px 0;font-size:15px;">
+                        <i class="fa fa-file-invoice" style="font-size:32px;display:block;margin-bottom:10px;opacity:.4;"></i>
+                        No invoices found.
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
-</div>
 
-@{
-    var start = Model.TotalCount == 0 ? 0 : ((Model.Page - 1) * Model.PageSize) + 1;
-    var end = Math.Min(Model.Page * Model.PageSize, Model.TotalCount);
-}
-
-<div class="d-flex justify-content-between align-items-center">
-    <div class="text-muted">Showing <strong>@start</strong> to <strong>@end</strong> of <strong>@Model.TotalCount</strong> invoices</div>
-
-    @if (Model.TotalPages > 1)
-    {
-        <nav aria-label="Page navigation">
-            <ul class="pagination mb-0">
-                <li class="page-item @(Model.Page == 1 ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new { page = Model.Page - 1, pageSize = Model.PageSize, invoiceNumber = Model.InvoiceNumber, customerName = Model.CustomerName, dateFrom = Model.DateFrom?.ToString("yyyy-MM-dd"), dateTo = Model.DateTo?.ToString("yyyy-MM-dd"), minTotal = Model.MinTotal, maxTotal = Model.MaxTotal })">&laquo; Prev</a>
-                </li>
-
-                @for (int p = 1; p <= Model.TotalPages; p++)
-                {
-                    // Show all pages but collapse if too many could be improved later
-                    <li class="page-item @(p == Model.Page ? "active" : "")">
-                        <a class="page-link" href="@Url.Action("Index", new { page = p, pageSize = Model.PageSize, invoiceNumber = Model.InvoiceNumber, customerName = Model.CustomerName, dateFrom = Model.DateFrom?.ToString("yyyy-MM-dd"), dateTo = Model.DateTo?.ToString("yyyy-MM-dd"), minTotal = Model.MinTotal, maxTotal = Model.MaxTotal })">@p</a>
-                    </li>
-                }
-
-                <li class="page-item @(Model.Page == Model.TotalPages ? "disabled" : "")">
-                    <a class="page-link" href="@Url.Action("Index", new { page = Model.Page + 1, pageSize = Model.PageSize, invoiceNumber = Model.InvoiceNumber, customerName = Model.CustomerName, dateFrom = Model.DateFrom?.ToString("yyyy-MM-dd"), dateTo = Model.DateTo?.ToString("yyyy-MM-dd"), minTotal = Model.MinTotal, maxTotal = Model.MaxTotal })">Next &raquo;</a>
-                </li>
-            </ul>
-        </nav>
+    @* ── PAGINATION ────────────────────────────────────────────── *@
+    @{
+        Func<int, string> pageUrl = p => Url.Action("Index", new
+        {
+            page = p,
+            pageSize = Model.PageSize,
+            invoiceNumber = Model.InvoiceNumber,
+            customerName = Model.CustomerName,
+            dateFrom = Model.DateFrom?.ToString("yyyy-MM-dd"),
+            dateTo = Model.DateTo?.ToString("yyyy-MM-dd"),
+            minTotal = Model.MinTotal,
+            maxTotal = Model.MaxTotal
+        });
     }
+
+    <div class="pagination-wrap">
+        @* First *@
+        <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@(Model.Page > 1 ? pageUrl(1) : "#")">
+            <i class="fa fa-angles-left"></i>
+        </a>
+        @* Prev *@
+        <a class="page-btn @(Model.Page <= 1 ? "disabled" : "")" href="@(Model.Page > 1 ? pageUrl(Model.Page - 1) : "#")">
+            <i class="fa fa-angle-left"></i>
+        </a>
+
+        @for (int p = Math.Max(1, Model.Page - 2); p <= Math.Min(Model.TotalPages, Model.Page + 2); p++)
+        {
+            <a class="page-btn @(p == Model.Page ? "active" : "")" href="@pageUrl(p)">@p</a>
+        }
+
+        @* Next *@
+        <a class="page-btn @(Model.Page >= Model.TotalPages ? "disabled" : "")" href="@(Model.Page < Model.TotalPages ? pageUrl(Model.Page + 1) : "#")">
+            <i class="fa fa-angle-right"></i>
+        </a>
+        @* Last *@
+        <a class="page-btn @(Model.Page >= Model.TotalPages ? "disabled" : "")" href="@(Model.Page < Model.TotalPages ? pageUrl(Model.TotalPages) : "#")">
+            <i class="fa fa-angles-right"></i>
+        </a>
+    </div>
+
+    <p style="text-align:center;color:var(--muted);font-size:13px;padding:10px 0 14px;">
+        Page @Model.Page of @(Model.TotalPages == 0 ? 1 : Model.TotalPages)
+    </p>
 </div>

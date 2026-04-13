@@ -3,39 +3,47 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <title>@ViewBag.Title - Billing System</title>
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                </ul>
-            </div>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid" style="max-width:1200px;margin:0 auto;display:flex;align-items:center;height:60px;padding:0 24px;">
+            <a class="navbar-brand" href="@Url.Action("Index","Invoices")">
+                <i class="fa fa-file-invoice-dollar" style="color:var(--teal);margin-right:8px;"></i>BillingSystem
+            </a>
+            <ul class="nav navbar-nav" style="margin-left:32px;display:flex;list-style:none;gap:4px;margin-bottom:0;">
+                <li>@Html.ActionLink("Invoices", "Index", "Invoices", null, new { style = "padding:8px 14px;border-radius:8px;font-weight:600;color:var(--text);text-decoration:none;" })</li>
+            </ul>
         </div>
-    </div>
+    </nav>
 
     <div class="container body-content">
         @RenderBody()
-        <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <p>&copy; @DateTime.Now.Year &mdash; Billing System &mdash; All rights reserved</p>
         </footer>
     </div>
 
     <script src="~/Scripts/jquery-1.10.2.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+        // Page search filter (client-side)
+        document.addEventListener('DOMContentLoaded', function () {
+            var searchInput = document.getElementById('pageSearch');
+            if (!searchInput) return;
+            searchInput.addEventListener('input', function () {
+                var val = this.value.toLowerCase();
+                var rows = document.querySelectorAll('.table-card tbody tr');
+                rows.forEach(function (row) {
+                    row.style.display = row.textContent.toLowerCase().includes(val) ? '' : 'none';
+                });
+            });
+        });
+    </script>
 </body>
 </html>
