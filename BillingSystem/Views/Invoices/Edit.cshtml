@@ -1,0 +1,68 @@
+﻿@model BillingSystem.Models.Invoice
+
+@{
+    ViewBag.Title = "Edit Invoice";
+}
+
+<h2>Edit Invoice</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(model => model.InvoiceId)
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InvoiceNumber, "Invoice Number", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(
+                    model => model.InvoiceNumber,
+                    new { @class = "form-control", @readonly = "readonly" }
+                )
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InvoiceDate, "Invoice Date", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(
+                    model => model.InvoiceDate,
+                    new { @class = "form-control", type = "datetime-local" }
+                )
+                @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustomerName, "Customer Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- TotalAmount visible but NOT editable -->
+        <div class="form-group">
+            @Html.Label("Total Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.TotalAmount, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @Html.ActionLink(
+                    "Cancel",
+                    "Details",
+                    new { id = Model.InvoiceId },
+                    new { @class = "btn btn-default" }
+                )
+            </div>
+        </div>
+    </div>
+}

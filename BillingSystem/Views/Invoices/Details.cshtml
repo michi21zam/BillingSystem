@@ -1,0 +1,66 @@
+﻿@model BillingSystem.Models.Invoice
+@{
+    ViewBag.Title = "Invoice Details";
+}
+
+<h2>Invoice Details</h2>
+
+<dl class="dl-horizontal">
+    <dt>Invoice Number</dt>
+    <dd>@Model.InvoiceNumber</dd>
+
+    <dt>Date</dt>
+    <dd>@Model.InvoiceDate</dd>
+
+    <dt>Customer</dt>
+    <dd>@Model.CustomerName</dd>
+
+    <dt>Total</dt>
+    <dd>@Model.TotalAmount</dd>
+</dl>
+
+<hr />
+
+<h3>Items</h3>
+
+@Html.ActionLink(
+    "Add Item",
+    "Create",
+    "InvoiceDetails",
+    new { invoiceId = Model.InvoiceId },
+    new { @class = "btn btn-primary" })
+
+@if (Model.InvoiceDetails.Any(d => d.IsActive))
+{
+    <table class="table">
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model.InvoiceDetails.Where(d => d.IsActive))
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice</td>
+                <td>@item.SubTotal</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", "InvoiceDetails", new { id = item.InvoiceDetailId }, null)
+                    |
+                    @Html.ActionLink("Delete", "Delete", "InvoiceDetails", new { id = item.InvoiceDetailId }, null)
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>No items added yet.</p>
+}
+
+<hr />
+@Html.ActionLink("Back to List", "Index")

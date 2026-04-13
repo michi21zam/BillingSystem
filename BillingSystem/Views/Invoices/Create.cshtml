@@ -1,0 +1,62 @@
+﻿@model BillingSystem.Models.Invoice
+
+@{
+    ViewBag.Title = "Create Invoice";
+}
+
+<h2>Create Invoice</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InvoiceNumber, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.InvoiceNumber, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.InvoiceNumber, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.InvoiceDate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(
+                    model => model.InvoiceDate,
+                    new { @class = "form-control", type = "datetime-local" }
+                )
+                @Html.ValidationMessageFor(model => model.InvoiceDate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustomerName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.CustomerName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.TotalAmount, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.TotalAmount, new { @class = "form-control", type = "number", step = "0.01" })
+                @Html.ValidationMessageFor(model => model.TotalAmount, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @* Keep IsActive true by default but hidden from the user *@
+        @Html.HiddenFor(m => m.IsActive)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create Invoice" class="btn btn-primary" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}
