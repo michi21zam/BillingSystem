@@ -32,11 +32,11 @@
 
         <div class="form-row-grid">
             <div class="float-field">
-                <label>InvoiceDetailId</label>
+                <label>Invoice Detail Id</label>
                 <input class="float-input" value="@Model.InvoiceDetailId" readonly />
             </div>
             <div class="float-field" style="grid-column:span 2;">
-                <label>ProductName</label>
+                <label>Product Name</label>
                 @Html.TextBoxFor(m => m.ProductName, new { @class = "float-input", placeholder = " " })
                 @Html.ValidationMessageFor(m => m.ProductName, "", new { @class = "field-error" })
             </div>
@@ -46,7 +46,7 @@
                 @Html.ValidationMessageFor(m => m.Quantity, "", new { @class = "field-error" })
             </div>
             <div class="float-field">
-                <label>UnitPrice</label>
+                <label>Unit Price</label>
                 @Html.TextBoxFor(m => m.UnitPrice, new { @class = "float-input", type = "number", step = "0.01", placeholder = " " })
                 @Html.ValidationMessageFor(m => m.UnitPrice, "", new { @class = "field-error" })
             </div>

@@ -27,27 +27,27 @@
     </div>
     <div class="form-row-grid">
         <div class="float-field">
-            <label>InvoiceId</label>
+            <label>Invoice Id</label>
             <input class="float-input" value="@Model.InvoiceId" readonly />
         </div>
         <div class="float-field">
-            <label>InvoiceNumber</label>
+            <label>Invoice Number</label>
             <input class="float-input" value="@Model.InvoiceNumber" readonly />
         </div>
         <div class="float-field">
-            <label>InvoiceDate</label>
+            <label>Invoice Date</label>
             <input class="float-input" value="@Model.InvoiceDate.ToString("MMM dd, yyyy HH:mm")" readonly />
         </div>
         <div class="float-field">
-            <label>CustomerName</label>
+            <label>Customer Name</label>
             <input class="float-input" value="@Model.CustomerName" readonly />
         </div>
         <div class="float-field">
-            <label>TotalAmount</label>
+            <label>Total Amount</label>
             <input class="float-input" value="@String.Format("{0:C}", Model.TotalAmount)" readonly />
         </div>
         <div class="float-field">
-            <label>IsActive</label>
+            <label>Status</label>
             <input class="float-input" value="@(Model.IsActive ? "Active" : "Inactive")" readonly />
         </div>
     </div>
@@ -71,12 +71,12 @@
     <table>
         <thead>
             <tr>
-                <th>InvoiceDetailId</th>
-                <th>ProductName</th>
+                @*<th>Invoice DetailId</th>*@
+                <th>Product Name</th>
                 <th>Quantity</th>
-                <th>UnitPrice</th>
+                <th>Unit Price</th>
                 <th>SubTotal</th>
-                <th>IsActive</th>
+                <th>Status</th>
                 <th class="text-center">Actions</th>
             </tr>
         </thead>
@@ -86,7 +86,7 @@
                 foreach (var item in Model.InvoiceDetails.Where(d => d.IsActive))
                 {
                     <tr>
-                        <td><strong>@item.InvoiceDetailId</strong></td>
+                        @*<td><strong>@item.InvoiceDetailId</strong></td>*@
                         <td>@item.ProductName</td>
                         <td>@item.Quantity</td>
                         <td>@String.Format("{0:C}", item.UnitPrice)</td>

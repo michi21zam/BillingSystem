@@ -31,25 +31,25 @@
 
         <div class="form-row-grid">
             <div class="float-field">
-                <label>InvoiceId</label>
+                <label>Invoice Id</label>
                 <input class="float-input" value="@Model.InvoiceId" readonly />
             </div>
             <div class="float-field">
-                <label>InvoiceNumber</label>
+                <label>Invoice Number</label>
                 @Html.TextBoxFor(m => m.InvoiceNumber, new { @class = "float-input", @readonly = "readonly", placeholder = " " })
             </div>
             <div class="float-field">
-                <label>InvoiceDate</label>
+                <label>Invoice Date</label>
                 @Html.TextBoxFor(m => m.InvoiceDate, "{0:yyyy-MM-ddTHH:mm}", new { @class = "float-input", type = "datetime-local", placeholder = " " })
                 @Html.ValidationMessageFor(m => m.InvoiceDate, "", new { @class = "field-error" })
             </div>
             <div class="float-field">
-                <label>CustomerName</label>
+                <label>Customer Name</label>
                 @Html.TextBoxFor(m => m.CustomerName, new { @class = "float-input", placeholder = " " })
                 @Html.ValidationMessageFor(m => m.CustomerName, "", new { @class = "field-error" })
             </div>
             <div class="float-field">
-                <label>TotalAmount</label>
+                <label>Total Amount</label>
                 @Html.TextBoxFor(m => m.TotalAmount, new { @class = "float-input", @readonly = "readonly", placeholder = " " })
             </div>
         </div>
