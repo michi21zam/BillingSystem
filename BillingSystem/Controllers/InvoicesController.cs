@@ -13,14 +13,65 @@ namespace BillingSystem.Controllers
         private readonly BillingDBEntities db = new BillingDBEntities();
 
         // GET: Invoices
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(
+            string invoiceNumber,
+            string customerName,
+            DateTime? dateFrom,
+            DateTime? dateTo,
+            decimal? minTotal,
+            decimal? maxTotal,
+            int page = 1,
+            int pageSize = 10)
         {
-            var invoices = await db.Invoices
-                .Where(i => i.IsActive)
-                .OrderByDescending(i => i.InvoiceDate)
+            if (page < 1) page = 1;
+            if (pageSize <= 0) pageSize = 10;
+
+            var query = db.Invoices.Where(i => i.IsActive).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(invoiceNumber))
+                query = query.Where(i => i.InvoiceNumber.Contains(invoiceNumber));
+
+            if (!string.IsNullOrWhiteSpace(customerName))
+                query = query.Where(i => i.CustomerName.Contains(customerName));
+
+            if (dateFrom.HasValue)
+                query = query.Where(i => DbFunctions.TruncateTime(i.InvoiceDate) >= DbFunctions.TruncateTime(dateFrom.Value));
+
+            if (dateTo.HasValue)
+                query = query.Where(i => DbFunctions.TruncateTime(i.InvoiceDate) <= DbFunctions.TruncateTime(dateTo.Value));
+
+            if (minTotal.HasValue)
+                query = query.Where(i => i.TotalAmount >= minTotal.Value);
+
+            if (maxTotal.HasValue)
+                query = query.Where(i => i.TotalAmount <= maxTotal.Value);
+
+            query = query.OrderByDescending(i => i.InvoiceDate);
+
+            var totalCount = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+            var invoices = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
-            return View(invoices);
+            var vm = new InvoiceIndexViewModel
+            {
+                Invoices = invoices,
+                InvoiceNumber = invoiceNumber,
+                CustomerName = customerName,
+                DateFrom = dateFrom,
+                DateTo = dateTo,
+                MinTotal = minTotal,
+                MaxTotal = maxTotal,
+                Page = page,
+                PageSize = pageSize,
+                TotalCount = totalCount,
+                TotalPages = totalPages
+            };
+
+            return View(vm);
         }
 
         // GET: Invoices/Details/5

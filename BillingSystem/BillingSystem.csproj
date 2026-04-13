@@ -139,6 +139,7 @@
     <Compile Include="Models\InvoiceDetail.cs">
       <DependentUpon>BillingModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\InvoiceIndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
