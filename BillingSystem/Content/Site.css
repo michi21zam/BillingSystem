@@ -15,6 +15,53 @@
     --shadow: 0 4px 18px rgba(11,85,102,.10);
 }
 
+/* Utility and helper classes to replace inline styles from views */
+.header-actions {
+    min-width: 120px;
+    text-align: right;
+}
+
+.btn-create--compact {
+    font-size: 13px;
+    padding: 9px 18px;
+}
+
+.page-header-section--compact {
+    margin-bottom: 14px;
+}
+
+.form-page-card--danger {
+    border-top: 4px solid #e8304a;
+}
+
+.form-page-header--danger {
+    color: #e8304a;
+    border-color: #fde8ec;
+}
+
+.btn-create--danger {
+    background: #e8304a;
+    box-shadow: 0 4px 12px rgba(232,48,74,.30);
+}
+
+.ml-10 {
+    margin-left: 10px;
+}
+
+.grid-span-2 {
+    grid-column: span 2;
+}
+
+.page-title--danger {
+    color: #e8304a;
+}
+
+.muted-lead {
+    color: var(--muted);
+    font-size: 14px;
+    margin-bottom: 22px;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -106,6 +153,11 @@ body {
     .page-title span {
         color: var(--teal);
     }
+
+/* smaller variant for secondary page titles used in details section */
+.page-title--small {
+    font-size: 20px;
+}
 
 /* ── BUTTONS ────────────────────────────────────────────── */
 .btn-create {

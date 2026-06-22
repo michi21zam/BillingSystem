@@ -14,7 +14,7 @@
         <div class="page-label">Invoice Items</div>
         <h1 class="page-title"><span>Edit</span> item settings</h1>
     </div>
-    <div style="min-width:120px;"></div>
+    <div class="header-actions"></div>
 </div>
 
 @using (Html.BeginForm("Edit", "InvoiceDetails", FormMethod.Post))
@@ -35,7 +35,7 @@
                 <label>Invoice Detail Id</label>
                 <input class="float-input" value="@Model.InvoiceDetailId" readonly />
             </div>
-            <div class="float-field" style="grid-column:span 2;">
+            <div class="float-field grid-span-2">
                 <label>Product Name</label>
                 @Html.TextBoxFor(m => m.ProductName, new { @class = "float-input", placeholder = " " })
                 @Html.ValidationMessageFor(m => m.ProductName, "", new { @class = "field-error" })

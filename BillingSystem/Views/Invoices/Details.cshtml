@@ -14,14 +14,14 @@
         <div class="page-label">Invoices</div>
         <h1 class="page-title"><span>Details</span> of invoice #@Model.InvoiceNumber</h1>
     </div>
-    <div style="min-width:120px;text-align:right;">
-        <a class="btn-create" href="@Url.Action("Edit", "Invoices", new { id = Model.InvoiceId })" style="font-size:13px;padding:9px 18px;">
+    <div class="header-actions">
+        <a class="btn-create btn-create--compact" href="@Url.Action("Edit", "Invoices", new { id = Model.InvoiceId })">
             <i class="fa fa-pen"></i> EDIT
         </a>
     </div>
 </div>
 
-<div class="form-page-card" style="margin-bottom:24px;">
+    <div class="form-page-card">
     <div class="form-page-header">
         <i class="fa fa-circle-info"></i> Invoice Information
     </div>
@@ -54,17 +54,17 @@
 </div>
 
 @* ── INVOICE DETAILS TABLE ────────────────────────────────── *@
-<div class="page-header-section" style="margin-bottom:14px;">
+<div class="page-header-section page-header-section--compact">
     <div>
-        <a class="btn-create" href="@Url.Action("Create", "InvoiceDetails", new { invoiceId = Model.InvoiceId })" style="font-size:13px;padding:9px 18px;">
+        <a class="btn-create btn-create--compact" href="@Url.Action("Create", "InvoiceDetails", new { invoiceId = Model.InvoiceId })">
             <i class="fa fa-plus"></i> ADD ITEM
         </a>
     </div>
     <div class="page-header-titles">
         <div class="page-label">Invoice Items</div>
-        <h2 class="page-title" style="font-size:20px;">Invoice <span>Details</span></h2>
+        <h2 class="page-title page-title--small">Invoice <span>Details</span></h2>
     </div>
-    <div style="min-width:120px;"></div>
+    <div class="header-actions"></div>
 </div>
 
 <div class="table-card">
@@ -92,14 +92,14 @@
                         <td>@String.Format("{0:C}", item.UnitPrice)</td>
                         <td>@(item.SubTotal.HasValue ? String.Format("{0:C}", item.SubTotal) : "-")</td>
                         <td><span class="badge-active">Active</span></td>
-                        <td style="text-align:center;">
+                        <td class="text-center">
                             <a class="action-btn action-edit"
                                href="@Url.Action("Edit", "InvoiceDetails", new { id = item.InvoiceDetailId })"
                                title="Edit">
                                 <i class="fa fa-pen"></i>
                             </a>
                             @using (Html.BeginForm("Delete", "InvoiceDetails", FormMethod.Post,
-                                new { style = "display:inline;", onsubmit = "return confirm('Delete this item?');" }))
+                                new { @class = "inline-form", onsubmit = "return confirm('Delete this item?');" }))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.Hidden("id", item.InvoiceDetailId)
@@ -114,8 +114,8 @@
             else
             {
                 <tr>
-                    <td colspan="7" style="text-align:center;color:#9aabb8;padding:36px 0;font-size:14px;">
-                        <i class="fa fa-box-open" style="font-size:30px;display:block;margin-bottom:10px;opacity:.35;"></i>
+                    <td colspan="7" class="no-data-cell">
+                        <i class="fa fa-box-open no-data-icon"></i>
                         No items added yet.
                     </td>
                 </tr>
